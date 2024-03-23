@@ -1,6 +1,5 @@
 from django.db import models
 from base_files.models import BaseModel
-from lesson.models import Lesson
 import uuid
 # Create your models here.
 
@@ -24,8 +23,8 @@ class Fields(BaseModel):
     degrees = models.CharField(max_length=50,choices=DEGREES_CHOICES)
 
 class SelectUnits(BaseModel):
-    # applicant_student = models.ForeignKey(to=Student, on_delete=models.CASCADE)
-    on_demand_courses = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+    applicant_student = models.ForeignKey(to='account.Student', on_delete=models.CASCADE)
+    on_demand_courses = models.ForeignKey(to='lesson.Lesson', on_delete=models.CASCADE)
     apporoval_student = models.BooleanField(default=False)
 
 class LeranGroup(BaseModel):

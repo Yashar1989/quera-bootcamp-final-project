@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from .validators import is_valid_national_code, is_valid_mobile
 import uuid
+from college.models import College
 # Create your models here.
 
 
@@ -89,9 +90,16 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Student(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='student')
-    # college = models.ForeignKey()
+    college = models.ForeignKey(to=College, on_delete=models.SET_NULL, null=True, blank=True, related_name='students')
     supervisor = models.ManyToManyField(to='Professor', related_name='supervisor')
-    # seniority = models.ManyToManyField()
+    seniority = models.CharField(max_length=1, blank=True, null=True, choices=(
+        ('1', '1'),
+        ('2', '2'),
+        ('3', '3'),
+        ('4', '4'),
+        ('5', '5'),
+        ('6', '6'),
+    ))
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'
@@ -100,7 +108,7 @@ class Student(models.Model):
 class Assistant(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
-    faculty = models.CharField(max_length=255, verbose_name='دانشکده')
+    faculty = models.ForeignKey(to='college.College', on_delete=models.CASCADE, verbose_name='دانشکده')
     field_of_study = models.CharField(max_length=255, verbose_name='رشته')
 
     def __str__(self):
@@ -110,7 +118,7 @@ class Assistant(models.Model):
 class Professor(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
-    faculty = models.CharField(max_length=255, verbose_name='دانشکده')
+    faculty = models.ForeignKey(to='college.College', on_delete=models.CASCADE, verbose_name='دانشکده')
     field_of_study = models.CharField(max_length=255, verbose_name='رشته')
     proficiency = models.CharField(max_length=255, verbose_name='تخصص')
     order = models.CharField(max_length=255, verbose_name='مرتبه')
