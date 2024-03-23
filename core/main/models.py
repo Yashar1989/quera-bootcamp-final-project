@@ -23,7 +23,6 @@ class EmergencySemesterDeleteRequest(BaseModel):
     student_comment = models.TextField(blank=True, null=True)
     superviser_comment = models.TextField(blank=True, null=True)
 
-
 class TermModificationRequest(models.Model):
     student = models.ForeignKey(to='account.Student', on_delete=models.CASCADE)
     added_course = models.ForeignKey(to='lesson.Lesson', related_name='added_courses', on_delete=models.CASCADE)
