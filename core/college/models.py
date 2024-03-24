@@ -11,7 +11,7 @@ class College(BaseModel):
     def __str__(self):
         return self.name
 
-class Fields(BaseModel):
+class Field(BaseModel):
     DEGREES_CHOICES=[
         ('advanced_diploma' ,'Advanced Diploma'),
         ('bachelor' ,'Bachelor'),
@@ -24,7 +24,7 @@ class Fields(BaseModel):
     number_unit = models.IntegerField()
     degrees = models.CharField(max_length=50,choices=DEGREES_CHOICES)
 
-class SelectUnits(BaseModel):
+class SelectUnit(BaseModel):
     applicant_student = models.ForeignKey(to='account.Student', on_delete=models.CASCADE)
     on_demand_courses = models.ForeignKey(to='lesson.Lesson', on_delete=models.CASCADE)
     apporoval_student = models.BooleanField(default=False)

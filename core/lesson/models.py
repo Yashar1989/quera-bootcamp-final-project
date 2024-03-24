@@ -77,7 +77,7 @@ class TermLesson(models.Model):
     def __str__(self):
         return self.lesson.name + self.term.name
 
-
+ 
 class RegisteredLesson(models.Model):
     status_choices = (
         (1, 'Registered'),
