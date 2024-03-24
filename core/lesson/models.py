@@ -26,7 +26,7 @@ class PresentationTime(models.Model):
     day_choices = (
         (1, 'Saturday'),
         (2, 'Sunday'),
-        (3, ' Monday'),
+        (3, 'Monday'),
         (4, 'Tuesday'),
         (5, 'Wednesday'),
         (6, 'Thursday'),
@@ -38,7 +38,10 @@ class PresentationTime(models.Model):
     end_time = models.TimeField(null=False, blank=False)
 
     def __str__(self):
-        return self.day  # todo add start and end time
+        for day_num, day_name in self.day_choices:
+            if day_num == self.day:
+                return day_name
+        return "Invalid Day"
 
 
 class Lesson(models.Model):
