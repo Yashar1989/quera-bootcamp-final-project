@@ -8,6 +8,8 @@ import uuid
 class College(BaseModel):
     name = models.CharField(max_length=250)
 
+    def __str__(self):
+        return self.name
 
 class Fields(BaseModel):
     DEGREES_CHOICES=[
