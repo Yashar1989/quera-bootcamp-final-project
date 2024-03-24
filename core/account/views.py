@@ -9,10 +9,14 @@ from .serializers import AssistantSerializer ,ProfessorSerializers
 
 # Create your views here.
 
+
+
 class RegisterProfessorView(ListCreateAPIView):
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializers
     permission_classes = (IsAdminUser ,)
+
+
 
 
 class CreateAssistantAPIView(ListCreateAPIView):
