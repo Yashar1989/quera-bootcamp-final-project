@@ -10,26 +10,22 @@ from .serializers import AssistantSerializer ,ProfessorSerializers ,UpdateDelete
 # Create your views here.
 
 
-
 class RegisterProfessorView(ListCreateAPIView):
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializers
     permission_classes = (IsAdminUser ,)
 
 
-class UpdateDeleteProfessorView(RetrieveUpdateDestroyAPIView):
-    serializer_class = UpdateDeleteProfessorSerializer
-    queryset = Professor.objects.all()
-    permission_classes = (IsAdminUser,)
-
-
-
 
 
 class CreateAssistantAPIView(ListCreateAPIView):
+    """
+    Make the user as an Assistant
+    """
     serializer_class = AssistantSerializer
     permission_classes = [IsAdminUser]
     queryset = Assistant.objects.all()
+
 
 
     def perform_create(self, serializer):
@@ -50,6 +46,9 @@ class CreateAssistantAPIView(ListCreateAPIView):
 
 
 class AssistantAPIView(RetrieveUpdateDestroyAPIView):
+    """
+    Retrieve, update, delete an Assistant
+    """
     serializer_class = AssistantSerializer
     permission_classes = [IsAdminUser]
     queryset = Assistant.objects.all()

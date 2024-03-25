@@ -53,7 +53,8 @@ class Lesson(models.Model):
     )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255, null=False, blank=False)
-    college = models.ForeignKey(to='college.College', on_delete=models.SET_DEFAULT, default='0-0-0-0', related_name='lessons')
+    college = models.ForeignKey(to='college.College', on_delete=models.SET_DEFAULT, default='0-0-0-0',
+                                related_name='lessons')
     prerequisite = models.ManyToManyField(to='self')
     corequisite = models.ManyToManyField(to='self')
     unit = models.SmallIntegerField(null=False, blank=False, validators=[MinValueValidator(1), MaxValueValidator(4)])
@@ -70,14 +71,15 @@ class TermLesson(models.Model):
 
     presentation_time = models.ManyToManyField(to='lesson.PresentationTime', related_name='lessons')
     exam_time = models.DateTimeField(null=False, blank=False)
-    lecturer = models.ForeignKey(to='account.Professor', on_delete=models.SET_NULL, null=True, related_name='teached_lessons')
+    lecturer = models.ForeignKey(to='account.Professor', on_delete=models.SET_NULL, null=True,
+                                 related_name='teached_lessons')
     capacity = models.IntegerField(default=25)
     term = models.ForeignKey(to='lesson.Term', on_delete=models.PROTECT, related_name='term_lessons')
 
     def __str__(self):
         return self.lesson.name + self.term.name
 
- 
+
 class RegisteredLesson(models.Model):
     status_choices = (
         (1, 'Registered'),
@@ -93,4 +95,3 @@ class RegisteredLesson(models.Model):
 
     def __str__(self):
         return self.lesson.name  # todo add self.student.name
-
