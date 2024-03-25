@@ -21,7 +21,7 @@ class RegisterProfessorView(ListCreateAPIView):
 class UpdateDeleteProfessorView(RetrieveUpdateDestroyAPIView):
     serializer_class = UpdateDeleteProfessorSerializer
     queryset = Professor.objects.all()
-    permission_classes = (IsAdminUser,)
+    permission_classes = (IsAdminUser ,)
 
 
 

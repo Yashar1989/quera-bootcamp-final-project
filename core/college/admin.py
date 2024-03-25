@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import College ,Fields ,SelectUnits ,LeranGroup
+from .models import College ,Field ,SelectUnit ,LeranGroup
 # Register your models here.
 
 
