@@ -3,18 +3,28 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from rest_framework.permissions import IsAdminUser
 from rest_framework import status, serializers
 from rest_framework.response import Response
-
-from .models import Assistant
-from .serializers import AssistantSerializer
+from .models import Assistant ,Professor
+from .serializers import AssistantSerializer ,ProfessorSerializers
 
 
 # Create your views here.
+
+
+
+class RegisterProfessorView(ListCreateAPIView):
+    queryset = Professor.objects.all()
+    serializer_class = ProfessorSerializers
+    permission_classes = (IsAdminUser ,)
+
+
 
 
 class CreateAssistantAPIView(ListCreateAPIView):
     serializer_class = AssistantSerializer
     permission_classes = [IsAdminUser]
     queryset = Assistant.objects.all()
+
+
 
     def perform_create(self, serializer):
         data = serializer.validated_data
