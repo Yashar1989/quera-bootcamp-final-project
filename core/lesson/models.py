@@ -3,6 +3,8 @@ import uuid
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
+<<<<<<< HEAD
+=======
 
 # Create your models here.
 class Term(models.Model):
@@ -94,3 +96,4 @@ class RegisteredLesson(models.Model):
     def __str__(self):
         return self.lesson.name  # todo add self.student.name
 
+>>>>>>> 77c119ae1d8c4343f5ebf5b1d11afc2d725c3581
