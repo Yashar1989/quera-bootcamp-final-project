@@ -18,6 +18,14 @@ class RegisterProfessorView(ListCreateAPIView):
 
 
 
+class UpdateDeleteProfessorView(RetrieveUpdateDestroyAPIView):
+    serializer_class = UpdateDeleteProfessorSerializer
+    queryset = Professor.objects.all()
+    permission_classes = (IsAdminUser,)
+
+
+
+
 class CreateAssistantAPIView(ListCreateAPIView):
     """
     Make the user as an Assistant
