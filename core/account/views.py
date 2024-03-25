@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework import status, serializers
 from rest_framework.response import Response
 from .models import Assistant ,Professor
-from .serializers import AssistantSerializer ,ProfessorSerializers
+from .serializers import AssistantSerializer ,ProfessorSerializers ,UpdateDeleteProfessorSerializer
 
 
 # Create your views here.
@@ -17,13 +17,19 @@ class RegisterProfessorView(ListCreateAPIView):
     permission_classes = (IsAdminUser ,)
 
 
+class UpdateDeleteProfessorView(RetrieveUpdateDestroyAPIView):
+    serializer_class = UpdateDeleteProfessorSerializer
+    queryset = Professor.objects.all()
+    permission_classes = (IsAdminUser,)
+
+
+
 
 
 class CreateAssistantAPIView(ListCreateAPIView):
     serializer_class = AssistantSerializer
     permission_classes = [IsAdminUser]
     queryset = Assistant.objects.all()
-
 
 
     def perform_create(self, serializer):
