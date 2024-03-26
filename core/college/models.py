@@ -12,9 +12,6 @@ class College(BaseModel):
         return self.name
 
 
-
-
-
 class Field(BaseModel):
     DEGREES_CHOICES=[
         ('advanced_diploma' ,'Advanced Diploma'),
@@ -30,10 +27,7 @@ class Field(BaseModel):
     
     def __str__(self):
         return self.name
-
-    
-
-    
+ 
 
 class SelectUnit(BaseModel):
     applicant_student = models.ForeignKey(to='account.Student', on_delete=models.CASCADE)
@@ -42,9 +36,6 @@ class SelectUnit(BaseModel):
     
     def __str__(self):
         return self.name
-
-
-
 
 
 class LeranGroup(BaseModel):
