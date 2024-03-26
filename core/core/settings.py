@@ -40,8 +40,10 @@ INSTALLED_APPS = [
     # 3rd party
     'rest_framework',
     'rest_framework_simplejwt',
+    'import_export',
     'drf_yasg',
     'drf_api_logger',
+
     # Other apps
     'account.apps.AccountConfig',
     'lesson.apps.LessonConfig',
@@ -57,8 +59,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-
     'drf_api_logger.middleware.api_logger_middleware.APILoggerMiddleware',
 ]
 
@@ -135,6 +135,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = 'static'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
