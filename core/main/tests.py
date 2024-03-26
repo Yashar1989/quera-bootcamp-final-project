@@ -1,14 +1,19 @@
 from django.test import TestCase
 from .models import EmploymentEducationRequest, EmergencySemesterDeleteRequest, RequestResult
-from account.models import Student
+from account.models import Student, User, Professor
 from lesson.models import Term
+from college.models import College
 
 # Create your tests here.
 
 class ModelTestCase(TestCase):
     def setUp(self):
-        self.student = Student.objects.create(name='Test Student')
-        self.term = Term.objects.create(name='Test Term')
+        self.student = Student.objects.create(user=User.objects.first(), college=College.objects.first(), supervisor=Professor.objects.first(), seniority=1)
+        self.term = Term.objects.create(name='Test Term', select_unit_start_time='2024-03-26 10:43:17', select_unit_end_time='2024-03-26 10:43:15',
+                                            class_start_time='2024-03-26', class_end_time='2024-03-26', amendment_start_time='2024-03-26 10:43:08', 
+                                            amendment_end_time='2024-03-26 10:43:03', emergency_removal_end_time='2024-03-26 10:43:00', 
+                                            exams_start_time='2024-03-26', term_end_time='2024-03-26'
+                                        )
         
     def test_employment_education_request_creation(self):
         employment_education_request = EmploymentEducationRequest.objects.create(

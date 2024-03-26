@@ -1,3 +1,33 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from import_export.admin import ImportExportModelAdmin
+from .resource import ProfessorResource, StudentResource
+from .models import User, Student, Professor, Assistant
 
 # Register your models here.
+
+class UserAdmin(admin.ModelAdmin):
+    list_display = ['national_code', 'first_name', 'last_name', 'user_code', 'phone_number', 'gender']
+    list_filter = ['gender']
+    ordering = ['national_code']
+
+
+class StudentAdmin(ImportExportModelAdmin):
+    list_display = ['user', 'college', 'get_supervisor', 'seniority']
+    list_filter = ['seniority', 'supervisor', 'college']
+    resource_class = StudentResource
+
+class ProfessorAdmin(ImportExportModelAdmin):
+    list_display = ['user', 'faculty', 'field_of_study', 'proficiency', 'order']
+    list_filter = ['faculty', 'field_of_study', 'order', 'proficiency']
+    resource_class = ProfessorResource
+
+class AssistantAdmin(admin.ModelAdmin):
+    list_display = ['user', 'faculty', 'field_of_study']
+    list_filter = ['faculty', 'field_of_study']
+
+
+admin.site.register(User, UserAdmin)
+admin.site.register(Student, StudentAdmin)
+admin.site.register(Professor, ProfessorAdmin)
+admin.site.register(Assistant, AssistantAdmin)

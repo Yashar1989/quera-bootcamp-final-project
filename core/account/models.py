@@ -101,6 +101,9 @@ class Student(models.Model):
         ('6', '6'),
     ))
 
+    def get_supervisor(self):
+        return ",".join([str(supervisor) for supervisor in self.supervisor.all()])
+
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'
 
