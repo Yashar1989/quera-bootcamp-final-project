@@ -7,6 +7,7 @@ from . models import EmploymentEducationRequest, EmergencySemesterDeleteRequest,
 from account.models import Student, Professor
 
 
+
 User = get_user_model()
 
 # Define an inline admin descriptor for Student model
