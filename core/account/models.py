@@ -37,7 +37,7 @@ class CustomUserManager(BaseUserManager):
         return user
 
     def create_professor(self, password, **kwargs):
-        user_code = f'a{kwargs.get("national_code")}'
+        user_code = f'p{kwargs.get("national_code")}'
         user = self.__create_user(password, user_code, **kwargs)
         professor = Student.objects.create(
             user=user,
@@ -53,7 +53,7 @@ class CustomUserManager(BaseUserManager):
         """
         Create and save a it manager
         """
-        user_code = f's{kwargs.get("national_code")}'
+        user_code = f'i{kwargs.get("national_code")}'
         kwargs.setdefault("is_staff", True)
         kwargs.setdefault("is_superuser", True)
         return self.__create_user(password, user_code, **kwargs)
@@ -77,7 +77,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     updated_date = models.DateTimeField(auto_now=True)
 
     objects = CustomUserManager()
-    USERNAME_FIELD = 'national_code'
+    USERNAME_FIELD = 'user_code'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'gender', 'birth_date']
 
     class Meta:
@@ -100,6 +100,9 @@ class Student(models.Model):
         ('5', '5'),
         ('6', '6'),
     ))
+
+    def get_supervisor(self):
+        return ",".join([str(supervisor) for supervisor in self.supervisor.all()])
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'
