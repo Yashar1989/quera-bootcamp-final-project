@@ -29,7 +29,7 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ['national_code',]
 # Re-register UserAdmin
 # admin.site.unregister(DjangoUser)
-admin.site.register(User, UserAdmin)
+# admin.site.register(User, UserAdmin)
 
 # Register your models here.
 admin.site.register(EmploymentEducationRequest)
