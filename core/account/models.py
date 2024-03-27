@@ -12,7 +12,8 @@ from college.models import College
 class CustomUserManager(BaseUserManager):
     def __create_user(self, password, user_code, **kwargs):
         user = self.model(
-            user_code=user_code, **kwargs
+            user_code=user_code,
+            **kwargs
         )
         user.set_password(password)
         user.save()
