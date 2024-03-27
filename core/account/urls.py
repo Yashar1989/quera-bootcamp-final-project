@@ -1,4 +1,5 @@
 from django.urls import path, include
+from .views import CreateAssistantAPIView, AssistantAPIView, RegisterProfessorView,UpdateDeleteProfessorView, CreateTermAPIView, DetailTermAPIView
 from .views import RegisterProfessorView, CreateTermAPIView, DetailTermAPIView
 
 app_name = 'account'
