@@ -1,14 +1,29 @@
 from django.test import TestCase
 from .models import EmploymentEducationRequest, EmergencySemesterDeleteRequest, RequestResult
-from account.models import Student
+from account.models import Student, User, Professor
 from lesson.models import Term
+<<<<<<< HEAD
+from django.contrib.auth.models import User, Group
+from django.urls import reverse
+from django.contrib import admin
+from .models import EmploymentEducationRequest, EmergencySemesterDeleteRequest, TermModificationRequest, ReviewRequest, EmergencyRemovalRequest
+from account.models import Student, Professor
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from .admin import UserAdmin, CustomGroupAdmin
+=======
+from college.models import College
+>>>>>>> 39450f0a68c17476c4d07d4988219dbfc8aaf89a
 
 # Create your tests here.
 
 class ModelTestCase(TestCase):
     def setUp(self):
-        self.student = Student.objects.create(name='Test Student')
-        self.term = Term.objects.create(name='Test Term')
+        self.student = Student.objects.create(user=User.objects.first(), college=College.objects.first(), supervisor=Professor.objects.first(), seniority=1)
+        self.term = Term.objects.create(name='Test Term', select_unit_start_time='2024-03-26 10:43:17', select_unit_end_time='2024-03-26 10:43:15',
+                                            class_start_time='2024-03-26', class_end_time='2024-03-26', amendment_start_time='2024-03-26 10:43:08', 
+                                            amendment_end_time='2024-03-26 10:43:03', emergency_removal_end_time='2024-03-26 10:43:00', 
+                                            exams_start_time='2024-03-26', term_end_time='2024-03-26'
+                                        )
         
     def test_employment_education_request_creation(self):
         employment_education_request = EmploymentEducationRequest.objects.create(
@@ -35,3 +50,56 @@ class ModelTestCase(TestCase):
         self.assertEqual(emergency_semester_delete_request.student_comment, 'Test Comment')
         self.assertEqual(emergency_semester_delete_request.superviser_comment, 'Test Comment')
 
+
+class AdminTestCase(TestCase):
+    def setUp(self):
+        # Create a regular user
+        self.user = User.objects.create_user(national_code='0020764685', last_name='test', first_name='test', gender= 'آقا', birth_date='2015-02-02', password='test')
+
+    def test_models_in_admin_panel(self):
+        # Log in to the admin panel
+        self.client.force_login(self.user)
+
+        # Get the admin panel URL
+        admin_url = reverse('admin:index')
+
+        # Access the page for EmploymentEducationRequest model
+        response = self.client.get(admin_url + 'app_name/employmenteducationrequest/')
+
+        # Check if the EmploymentEducationRequest model is displayed in the admin panel
+        self.assertEqual(response.status_code, 200)
+
+        # Check for the presence of content related to the EmploymentEducationRequest model on the page
+        self.assertContains(response, 'Employment Education Requests')
+
+    def test_user_admin_inline_student(self):
+        # Test for the addition of the Student inline to the User admin panel
+        self.assertIn(Student, UserAdmin.inlines)
+
+    def test_user_admin_inline_professor(self):
+        # Test for the addition of the Professor inline to the User admin panel
+        self.assertIn(Professor, UserAdmin.inlines)
+
+    def test_custom_group_admin(self):
+        # Test for registering the custom Group model in the admin panel
+        self.assertTrue(Group in admin.site._registry)
+        self.assertIsInstance(admin.site._registry[Group], CustomGroupAdmin)
+
+    def test_user_model_admin(self):
+        # Test for registering the User model in the admin panel
+        self.assertTrue(User in admin.site._registry)
+        self.assertIsInstance(admin.site._registry[User], UserAdmin)
+
+    def test_admin_panel_headers(self):
+        # Test for the settings of admin panel headers
+        self.assertEqual(admin.site.site_header, 'Custom Admin Panel')
+        self.assertEqual(admin.site.index_title, 'Welcome to the Custom Admin Panel')
+        self.assertEqual(admin.site.site_title, 'Admin Panel')
+
+    def test_model_registration(self):
+        # Test for registering models in the admin panel
+        self.assertTrue(EmploymentEducationRequest in admin.site._registry)
+        self.assertTrue(EmergencySemesterDeleteRequest in admin.site._registry)
+        self.assertTrue(TermModificationRequest in admin.site._registry)
+        self.assertTrue(ReviewRequest in admin.site._registry)
+        self.assertTrue(EmergencyRemovalRequest in admin.site._registry)

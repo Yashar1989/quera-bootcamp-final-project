@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Professor ,Assistant, User
+from .models import Professor ,Assistant ,User
+from lesson.models import Term
 
 
 
@@ -26,4 +27,9 @@ class UpdateDeleteProfessorSerializer(serializers.ModelSerializer):
 class AssistantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assistant
+        fields = '__all__'
+
+class TermSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Term
         fields = '__all__'
