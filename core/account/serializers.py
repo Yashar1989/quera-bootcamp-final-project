@@ -16,6 +16,7 @@ class ProfessorSerializers(serializers.ModelSerializer):
         model = Professor
         fields = '__all__'
 
+
 #update and delete professors serializers
 class UpdateDeleteProfessorSerializer(serializers.ModelSerializer):
     user = UserSerializer()
@@ -28,6 +29,7 @@ class AssistantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assistant
         fields = '__all__'
+        
 
 class TermSerializer(serializers.ModelSerializer):
     class Meta:

@@ -6,9 +6,7 @@ from rest_framework.response import Response
 from .models import Assistant, Professor
 from lesson.models import Term
 from .serializers import AssistantSerializer, ProfessorSerializers , TermSerializer ,UpdateDeleteProfessorSerializer
-
-
-# Create your views here.
+from .serializers import ProfessorSerializers, TermSerializer
 
 
 class RegisterProfessorView(ListCreateAPIView):
@@ -76,6 +74,7 @@ class AssistantAPIView(RetrieveUpdateDestroyAPIView):
 
         except Exception as e:
             return super().handle_exception(e)
+
 
 class CreateTermAPIView(ListCreateAPIView):
     """
