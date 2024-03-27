@@ -5,16 +5,24 @@ from rest_framework import status, serializers
 from rest_framework.response import Response
 from .models import Assistant, Professor
 from lesson.models import Term
-from .serializers import AssistantSerializer, ProfessorSerializers, TermSerializer
-
-
-# Create your views here.
+from .serializers import AssistantSerializer, ProfessorSerializers , TermSerializer ,UpdateDeleteProfessorSerializer
+from .serializers import ProfessorSerializers, TermSerializer
 
 
 class RegisterProfessorView(ListCreateAPIView):
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializers
-    permission_classes = [IsAdminUser]
+    permission_classes = (IsAdminUser ,)
+
+
+
+
+class UpdateDeleteProfessorView(RetrieveUpdateDestroyAPIView):
+    serializer_class = UpdateDeleteProfessorSerializer
+    queryset = Professor.objects.all()
+    permission_classes = (IsAdminUser ,)
+
+
 
 
 class CreateAssistantAPIView(ListCreateAPIView):
@@ -24,6 +32,8 @@ class CreateAssistantAPIView(ListCreateAPIView):
     serializer_class = AssistantSerializer
     permission_classes = [IsAdminUser]
     queryset = Assistant.objects.all()
+
+
 
     def perform_create(self, serializer):
         data = serializer.validated_data
@@ -64,6 +74,7 @@ class AssistantAPIView(RetrieveUpdateDestroyAPIView):
 
         except Exception as e:
             return super().handle_exception(e)
+
 
 class CreateTermAPIView(ListCreateAPIView):
     """
