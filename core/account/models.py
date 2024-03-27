@@ -16,9 +16,9 @@ class CustomUserManager(BaseUserManager):
 
     def __create_user(self, password, user_code, **kwargs):
         self.model = User
-        user_model = self.model
-        user = user_model(
-            user_code=user_code, **kwargs
+        user = self.model(
+            user_code=user_code,
+            **kwargs
         )
         user.set_password(password)
         user.save()
