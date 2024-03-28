@@ -96,7 +96,7 @@ class PresentationTimeModelTests(TestCase):
 class LessonModelTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.college = College.objects.create(name='Test College')
+        cls.college = College.objects.create(name='Test Faculty')
 
     def test_create_lesson(self):
         lesson = Lesson.objects.create(

@@ -1,10 +1,10 @@
 from django.contrib import admin
-from .models import College ,Field ,SelectUnit ,LearnGroup
+from .models import Faculty, Field, SelectUnit, Department
+
 # Register your models here.
 
 
-
-admin.site.register(College)
+admin.site.register(Faculty)
 admin.site.register(Field)
 admin.site.register(SelectUnit)
-admin.site.register(LearnGroup)
+admin.site.register(Department)

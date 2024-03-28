@@ -53,8 +53,9 @@ class Lesson(models.Model):
     )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255, null=False, blank=False)
-    college = models.ForeignKey(to='college.College', on_delete=models.SET_DEFAULT, default='0-0-0-0',
+    college = models.ForeignKey(to='college.Faculty', on_delete=models.SET_DEFAULT, default='0-0-0-0',
                                 related_name='lessons')
+    field = models.ForeignKey(to='college.Field', on_delete=models.PROTECT, related_name='field_lessons')
     prerequisite = models.ManyToManyField(to='self')
     corequisite = models.ManyToManyField(to='self')
     unit = models.SmallIntegerField(null=False, blank=False, validators=[MinValueValidator(1), MaxValueValidator(4)])
