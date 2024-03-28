@@ -31,10 +31,10 @@ class Field(BaseModel):
     name = models.CharField(max_length=255, null=False, blank=False)
     learn_group = models.ForeignKey(to='LearnGroup', on_delete=models.CASCADE, related_name='fields')
     unit_number = models.PositiveIntegerField()
-    degrees = models.CharField(max_length=50, choices=DEGREES_CHOICES)
+    degree = models.CharField(max_length=50, choices=DEGREES_CHOICES)
 
     def __str__(self):
-        return self.name
+        return self.name + self.degree
 
 
 class SelectUnit(BaseModel):
