@@ -11,14 +11,14 @@ class StudentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Student
-        fields = ['id', 'user', 'college', 'seniority']
+        fields = ['id', 'user', 'field', 'seniority']
 
 class FilteredStudentSerializer(serializers.ModelSerializer):
     user = UserSerializer()
 
     class Meta:
         model = Student
-        fields = ['id', 'user', 'college', 'seniority']
+        fields = ['id', 'user', 'field', 'seniority']
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -30,7 +30,7 @@ class StudentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Student
-        fields = ['id', 'user', 'college', 'supervisor', 'seniority']
+        fields = ['id', 'user', 'field', 'supervisor', 'seniority']
 
 class DetailedStudentSerializer(serializers.ModelSerializer):
     user = UserSerializer()

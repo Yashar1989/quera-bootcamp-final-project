@@ -58,7 +58,8 @@ class CustomUserManager(BaseUserManager):
         """
         Create and save a it manager
         """
-        user_code = f'i{kwargs.get("national_code")}'
+        kwargs.setdefault('national_code', kwargs.get("user_code"))
+        user_code = f'i{kwargs.pop("user_code")}'
         kwargs.setdefault("is_staff", True)
         kwargs.setdefault("is_superuser", True)
         return self.__create_user(password, user_code, **kwargs)

@@ -6,7 +6,7 @@ from rest_framework import status
 from .college_serializers import FacultySerializer
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
     class Meta:
@@ -16,7 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class AssistantSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
-    user = UserSerializer()
+    user = UserCreateSerializer()
     faculty = FacultySerializer()
 
     class Meta:
