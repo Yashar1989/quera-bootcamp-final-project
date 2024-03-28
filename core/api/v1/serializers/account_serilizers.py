@@ -3,10 +3,10 @@ from account.models import Assistant, User, CustomUserManager
 from rest_framework.response import Response
 from rest_framework import status
 
-from .college_serializers import CollegeSerializer
+from .college_serializers import FacultySerializer
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
     class Meta:
@@ -16,12 +16,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 class AssistantSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
-    user = UserSerializer()
-    faculty = CollegeSerializer()
+    user = UserCreateSerializer()
+    faculty = FacultySerializer()
 
     class Meta:
         model = Assistant
-        fields = ['id', 'user', 'faculty', 'field_of_study']
+        fields = ['id', 'user', 'faculty']
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')

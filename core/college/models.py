@@ -4,20 +4,21 @@ from base_files.models import BaseModel
 
 # Create your models here.
 
-
-class College(BaseModel):
+class Faculty(BaseModel):
     name = models.CharField(max_length=250, null=False, blank=False)
 
     def __str__(self):
         return self.name
 
 
-class LearnGroup(BaseModel):
+class Department(BaseModel):
+    faculty = models.ForeignKey(to='Faculty', on_delete=models.CASCADE, related_name='departments')
     name = models.CharField(max_length=255, null=False, blank=False)
-    college = models.ForeignKey(to='College', on_delete=models.CASCADE, related_name='learn_groups')
+    manager = models.ForeignKey(to='account.Professor', on_delete=models.CASCADE)
+    professors = models.ManyToManyField(to='account.Professor', related_name='departments')
 
     def __str__(self):
-        return self.name + self.college.name
+        return self.name + self.faculty.name
 
 
 class Field(BaseModel):
@@ -29,12 +30,12 @@ class Field(BaseModel):
         ('post_doctorate', 'Post Doctorate'),
     ]
     name = models.CharField(max_length=255, null=False, blank=False)
-    learn_group = models.ForeignKey(to='LearnGroup', on_delete=models.CASCADE, related_name='fields')
+    department = models.ForeignKey(to='Department', on_delete=models.CASCADE, related_name='fields')
     unit_number = models.PositiveIntegerField()
-    degrees = models.CharField(max_length=50, choices=DEGREES_CHOICES)
+    degree = models.CharField(max_length=50, choices=DEGREES_CHOICES)
 
     def __str__(self):
-        return self.name
+        return self.name + self.degree
 
 
 class SelectUnit(BaseModel):

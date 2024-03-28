@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from .validators import is_valid_national_code, is_valid_mobile
 import uuid
-from college.models import College
+from college.models import Faculty
 
 
 # Create your models here.
@@ -33,13 +33,11 @@ class CustomUserManager(BaseUserManager):
 
     def create_assistant(self, password, **kwargs):
         user_code = f'a{kwargs.get("national_code")}'
-        faculty = College.objects.get(pk=kwargs.pop('faculty')['id'])
-        field_of_study = kwargs.pop('field_of_study')
+        faculty = Faculty.objects.get(pk=kwargs.pop('faculty')['id'])
         user = self.__create_user(password, user_code, **kwargs)
         assistant = Assistant.objects.create(
             user=user,
             faculty=faculty,
-            field_of_study=field_of_study
         )
         assistant.save()
         return assistant
@@ -50,7 +48,6 @@ class CustomUserManager(BaseUserManager):
         professor = Student.objects.create(
             user=user,
             faculty=kwargs.get('faculty'),
-            field_of_study=kwargs.get('field_of_study'),
             proficiency=kwargs.get('proficiency')
         )
 
@@ -61,7 +58,8 @@ class CustomUserManager(BaseUserManager):
         """
         Create and save a it manager
         """
-        user_code = f'i{kwargs.get("national_code")}'
+        kwargs.setdefault('national_code', kwargs.get("user_code"))
+        user_code = f'i{kwargs.pop("user_code")}'
         kwargs.setdefault("is_staff", True)
         kwargs.setdefault("is_superuser", True)
         return self.__create_user(password, user_code, **kwargs)
@@ -99,7 +97,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Student(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='student')
-    college = models.ForeignKey(to=College, on_delete=models.SET_NULL, null=True, blank=True, related_name='students')
+    field = models.ForeignKey(to='college.Field', on_delete=models.PROTECT, related_name='field_students')
     supervisor = models.ManyToManyField(to='Professor', related_name='supervisor')
     seniority = models.CharField(max_length=1, blank=True, null=True, choices=(
         ('1', '1'),
@@ -120,8 +118,8 @@ class Student(models.Model):
 class Assistant(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='assistant')
-    faculty = models.ForeignKey(to='college.College', on_delete=models.CASCADE, verbose_name='دانشکده')
-    field_of_study = models.CharField(max_length=255, verbose_name='رشته')
+    faculty = models.ForeignKey(to='college.Faculty', on_delete=models.CASCADE, verbose_name='دانشکده',
+                                related_name='assistant')
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'
@@ -130,8 +128,8 @@ class Assistant(models.Model):
 class Professor(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
-    faculty = models.ForeignKey(to='college.College', on_delete=models.CASCADE, verbose_name='دانشکده')
-    field_of_study = models.CharField(max_length=255, verbose_name='رشته')
+    faculty = models.ForeignKey(to='college.Faculty', on_delete=models.CASCADE, verbose_name='دانشکده',
+                                related_name='professors')
     proficiency = models.CharField(max_length=255, verbose_name='تخصص')
     order = models.CharField(max_length=255, verbose_name='مرتبه')
 

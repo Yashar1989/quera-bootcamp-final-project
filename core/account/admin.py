@@ -4,6 +4,7 @@ from import_export.admin import ImportExportModelAdmin
 from .resource import ProfessorResource, StudentResource
 from .models import User, Student, Professor, Assistant
 
+
 # Register your models here.
 
 class UserAdmin(admin.ModelAdmin):
@@ -13,18 +14,20 @@ class UserAdmin(admin.ModelAdmin):
 
 
 class StudentAdmin(ImportExportModelAdmin):
-    list_display = ['user', 'college', 'get_supervisor', 'seniority']
-    list_filter = ['seniority', 'supervisor', 'college']
+    list_display = ['user', 'field', 'get_supervisor', 'seniority']
+    list_filter = ['seniority', 'supervisor', 'field']
     resource_class = StudentResource
 
+
 class ProfessorAdmin(ImportExportModelAdmin):
-    list_display = ['user', 'faculty', 'field_of_study', 'proficiency', 'order']
-    list_filter = ['faculty', 'field_of_study', 'order', 'proficiency']
+    list_display = ['user', 'faculty', 'proficiency', 'order']
+    list_filter = ['faculty', 'order', 'proficiency']
     resource_class = ProfessorResource
 
+
 class AssistantAdmin(admin.ModelAdmin):
-    list_display = ['user', 'faculty', 'field_of_study']
-    list_filter = ['faculty', 'field_of_study']
+    list_display = ['user', 'faculty']
+    list_filter = ['faculty']
 
 
 admin.site.register(User, UserAdmin)

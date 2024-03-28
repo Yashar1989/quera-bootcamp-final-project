@@ -1,12 +1,12 @@
 from rest_framework import serializers
 
-from college.models import College
+from college.models import Faculty
 
 
-class CollegeSerializer(serializers.ModelSerializer):
+class FacultySerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(write_only=True)
     name = serializers.CharField(read_only=True)
 
     class Meta:
-        model = College
+        model = Faculty
         fields = ['name', 'id']
