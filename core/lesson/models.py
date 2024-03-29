@@ -53,7 +53,7 @@ class Lesson(models.Model):
     )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255, null=False, blank=False)
-    faculty = models.ForeignKey(to='college.Faculty', on_delete=models.SET_DEFAULT, default='0-0-0-0',
+    faculty = models.ForeignKey(to='college.Faculty', on_delete=models.PROTECT,
                                 related_name='lessons')
     field = models.ForeignKey(to='college.Field', on_delete=models.PROTECT, related_name='field_lessons')
     prerequisite = models.ManyToManyField(to='self', blank=True, symmetrical=False, related_name='postrequisites')

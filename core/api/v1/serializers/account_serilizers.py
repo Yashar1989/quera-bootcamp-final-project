@@ -2,9 +2,7 @@ from rest_framework import serializers
 from account.models import Assistant, User, CustomUserManager
 from rest_framework.response import Response
 from rest_framework import status
-
 from .college_serializers import FacultySerializer
-
 
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
