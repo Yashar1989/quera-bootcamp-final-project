@@ -1,7 +1,7 @@
 from django.urls import path
 from .views.main_views import CreateStudent, ListStudents, FilterStudents, UpdateStudent, RetrieveStudent, DeleteStudent
 from .views.account_views import CreateAssistantAPIView, AssistantAPIView
-
+from .views.lesson_views import LessonListAPIView
 app_name = 'api_v1'
 
 urlpatterns = [
@@ -13,5 +13,6 @@ urlpatterns = [
     path('student/<slug:user_code>/delete/', DeleteStudent.as_view(), name='delete-student'),
     path('assistant/', CreateAssistantAPIView.as_view(), name='create_assistant'),
     path('assistant/<uuid:pk>/', AssistantAPIView.as_view(), name='assistant'),
+    path('lesson/', LessonListAPIView.as_view(), name='lesson'),
 ]
 
