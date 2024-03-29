@@ -58,8 +58,7 @@ class CustomUserManager(BaseUserManager):
         """
         Create and save a it manager
         """
-        kwargs.setdefault('national_code', kwargs.get("user_code"))
-        user_code = f'i{kwargs.pop("user_code")}'
+        user_code = f'i{kwargs.pop("national_code")}'
         kwargs.setdefault("is_staff", True)
         kwargs.setdefault("is_superuser", True)
         return self.__create_user(password, user_code, **kwargs)
@@ -84,7 +83,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     updated_date = models.DateTimeField(auto_now=True)
 
     objects = CustomUserManager()
-    USERNAME_FIELD = 'user_code'
+    USERNAME_FIELD = 'national_code'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'gender', 'birth_date']
 
     class Meta:
