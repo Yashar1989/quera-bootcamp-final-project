@@ -67,8 +67,7 @@ class Lesson(models.Model):
 
 class TermLesson(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    lesson = models.ForeignKey(to='lesson.Lesson', on_delete=models.SET_DEFAULT, default='0-0-0-0',
-                               related_name='presented')
+    lesson = models.ForeignKey(to='lesson.Lesson', on_delete=models.PROTECT, related_name='presented')
 
     presentation_time = models.ManyToManyField(to='lesson.PresentationTime', related_name='lessons')
     exam_time = models.DateTimeField(null=False, blank=False)
