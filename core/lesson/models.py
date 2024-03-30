@@ -53,11 +53,11 @@ class Lesson(models.Model):
     )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255, null=False, blank=False)
-    college = models.ForeignKey(to='college.Faculty', on_delete=models.SET_DEFAULT, default='0-0-0-0',
+    faculty = models.ForeignKey(to='college.Faculty', on_delete=models.PROTECT,
                                 related_name='lessons')
     field = models.ForeignKey(to='college.Field', on_delete=models.PROTECT, related_name='field_lessons')
-    prerequisite = models.ManyToManyField(to='self', blank=True)
-    corequisite = models.ManyToManyField(to='self', blank=True)
+    prerequisite = models.ManyToManyField(to='self', blank=True, symmetrical=False, related_name='postrequisites')
+    corequisite = models.ManyToManyField(to='self', blank=True, symmetrical=False, related_name='corequisites')
     unit = models.SmallIntegerField(null=False, blank=False, validators=[MinValueValidator(1), MaxValueValidator(4)])
     type = models.SmallIntegerField(null=False, blank=False, choices=unit_type_choices)
 
@@ -67,8 +67,7 @@ class Lesson(models.Model):
 
 class TermLesson(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    lesson = models.ForeignKey(to='lesson.Lesson', on_delete=models.SET_DEFAULT, default='0-0-0-0',
-                               related_name='presented')
+    lesson = models.ForeignKey(to='lesson.Lesson', on_delete=models.PROTECT, related_name='presented')
 
     presentation_time = models.ManyToManyField(to='lesson.PresentationTime', related_name='lessons')
     exam_time = models.DateTimeField(null=False, blank=False)
