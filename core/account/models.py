@@ -1,12 +1,9 @@
-from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
 from django.db import models
-from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
 from .validators import is_valid_national_code, is_valid_mobile
 import uuid
-from college.models import Faculty
+from college.models import Faculty, Field
 
 
 # Create your models here.
@@ -26,8 +23,16 @@ class CustomUserManager(BaseUserManager):
 
     def create_student(self, password, **kwargs):
         user_code = f's{kwargs.get("national_code")}'
+        field = Field.objects.get(name=kwargs.pop('field'))
+        supervisor = Professor.objects.get(name=kwargs.pop('supervisor'))
+        seniority = kwargs.pop('seniority')
         user = self.__create_user(password, user_code, **kwargs)
-        student = Student.objects.create(user=user)
+        student = Student.objects.create(
+            user=user,
+            field=field,
+            supervisor=supervisor,
+            seniority=seniority,
+        )
         student.save()
         return user
 
@@ -44,11 +49,15 @@ class CustomUserManager(BaseUserManager):
 
     def create_professor(self, password, **kwargs):
         user_code = f'p{kwargs.get("national_code")}'
+        faculty = Faculty.objects.get(name=kwargs.pop('faculty'))
+        proficiency = kwargs.pop('proficiency'),
+        order = kwargs.pop('order')
         user = self.__create_user(password, user_code, **kwargs)
-        professor = Student.objects.create(
+        professor = Professor.objects.create(
             user=user,
-            faculty=kwargs.get('faculty'),
-            proficiency=kwargs.get('proficiency')
+            faculty=faculty,
+            proficiency=proficiency,
+            order=order
         )
 
         professor.save()
@@ -56,10 +65,9 @@ class CustomUserManager(BaseUserManager):
 
     def create_superuser(self, password, **kwargs):
         """
-        Create and save a it manager
+        Create and save it manager
         """
-        kwargs.setdefault('national_code', kwargs.get("user_code"))
-        user_code = f'i{kwargs.pop("user_code")}'
+        user_code = f'i{kwargs.get("national_code")}'
         kwargs.setdefault("is_staff", True)
         kwargs.setdefault("is_superuser", True)
         return self.__create_user(password, user_code, **kwargs)
@@ -73,7 +81,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     image = models.ImageField(upload_to='profile', null=True, blank=True, verbose_name='عکس پروفایل')
     phone_number = models.BigIntegerField(unique=True, validators=[is_valid_mobile], verbose_name='تلفن همراه',
                                           null=True, blank=True)
-    national_code = models.CharField(max_length=10, unique=True, validators=[is_valid_national_code],
+    national_code = models.CharField(max_length=10, validators=[is_valid_national_code],
                                      verbose_name='کد ملی')
     gender = models.CharField(max_length=4, choices=(('آقا', 'آقا'), ('خانم', 'خانم')), verbose_name='جنسیت')
     birth_date = models.DateField(verbose_name='تاریخ تولد')
@@ -96,7 +104,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Student(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='student')
+    user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='student')
     field = models.ForeignKey(to='college.Field', on_delete=models.PROTECT, related_name='field_students')
     supervisor = models.ManyToManyField(to='Professor', related_name='supervisor')
     seniority = models.CharField(max_length=1, blank=True, null=True, choices=(
@@ -117,7 +125,7 @@ class Student(models.Model):
 
 class Assistant(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='assistant')
+    user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='assistant')
     faculty = models.ForeignKey(to='college.Faculty', on_delete=models.CASCADE, verbose_name='دانشکده',
                                 related_name='assistant')
 
@@ -127,7 +135,7 @@ class Assistant(models.Model):
 
 class Professor(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    user = models.OneToOneField(to=User, on_delete=models.CASCADE)
     faculty = models.ForeignKey(to='college.Faculty', on_delete=models.CASCADE, verbose_name='دانشکده',
                                 related_name='professors')
     proficiency = models.CharField(max_length=255, verbose_name='تخصص')
