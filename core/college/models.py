@@ -35,7 +35,7 @@ class Field(BaseModel):
     degree = models.CharField(max_length=50, choices=DEGREES_CHOICES)
 
     def __str__(self):
-        return self.name + self.degree
+        return self.name + ' ' + self.degree
 
 
 class SelectUnit(BaseModel):

@@ -14,7 +14,7 @@ class UserAdmin(admin.ModelAdmin):
 
 
 class StudentAdmin(ImportExportModelAdmin):
-    list_display = ['user', 'field', 'get_supervisor', 'seniority']
+    list_display = ['user', 'field', 'supervisor', 'seniority']
     list_filter = ['seniority', 'supervisor', 'field']
     resource_class = StudentResource
 
