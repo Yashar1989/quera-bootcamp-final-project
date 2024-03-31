@@ -126,6 +126,8 @@ class Student(models.Model):
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'
 
+    def get_user_code(self):
+        return self.user.user_code
 
 class Assistant(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -147,3 +149,6 @@ class Professor(models.Model):
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'
+
+    def get_user_code(self):
+        return self.user.user_code
