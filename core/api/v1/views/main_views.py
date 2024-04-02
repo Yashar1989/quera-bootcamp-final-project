@@ -2,12 +2,14 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from account.models import Student
-from lesson.models import TermLesson, RegisteredLesson
+from lesson.models import TermLesson, Term
 from ..serializers.main_serializers import StudentSerializer
 from django.db.models import Q
 from ..serializers.main_serializers import FilteredStudentSerializer, DetailedStudentSerializer
+from ..serializers.lesson_serializers import TermSerializer
 from rest_framework import generics
 import re
+from datetime import datetime
 
 
 class CreateStudent(APIView):
@@ -68,14 +70,11 @@ class DeleteStudent(generics.DestroyAPIView):
     lookup_field = 'user__user_code'
 
 
-class TermListAPIView(APIView):
-    def get(self, request):
-        if request.user.is_authenticated:
-            if re.match("^[p]\d{10}$", request.user.user_code):
-                term_list = RegisteredLesson.objects.filter(lesson__lecturer__user=request.user)
-                return Response({'terms': term_list})
-            elif re.match("^[i]\d{10}$", request.user.user_code):
-                term_list = RegisteredLesson.objects.filter(student=request.user)
-                return Response({'terms': term_list})
-        else:
-            return Response({'message': 'you should logged in'})
+class TermListAPIView(generics.ListAPIView):
+    queryset = Term.objects.filter(term_end_time__gte=datetime.now())
+    serializer_class = TermSerializer
+
+
+class TermDetailAPIView(generics.RetrieveAPIView):
+    queryset = Term.objects.filter(term_end_time__gte=datetime.now())
+    serializer_class = TermSerializer
