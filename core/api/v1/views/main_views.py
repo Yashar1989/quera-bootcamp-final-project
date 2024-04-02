@@ -2,13 +2,13 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from account.models import Student
-from lesson.models import TermLesson, Term
+from lesson.models import TermLesson, Term, Lesson
 from ..serializers.main_serializers import StudentSerializer
 from django.db.models import Q
 from ..serializers.main_serializers import FilteredStudentSerializer, DetailedStudentSerializer
-from ..serializers.lesson_serializers import TermSerializer
+from ..serializers.lesson_serializers import TermViewSerializer, LessonListSerializer
 from rest_framework import generics
-import re
+from ..permissions import IsStudentOrProfessor
 from datetime import datetime
 
 
@@ -71,10 +71,17 @@ class DeleteStudent(generics.DestroyAPIView):
 
 
 class TermListAPIView(generics.ListAPIView):
+    permission_classes = [IsStudentOrProfessor]
     queryset = Term.objects.filter(term_end_time__gte=datetime.now())
-    serializer_class = TermSerializer
+    serializer_class = TermViewSerializer
 
 
 class TermDetailAPIView(generics.RetrieveAPIView):
+    permission_classes = [IsStudentOrProfessor]
     queryset = Term.objects.filter(term_end_time__gte=datetime.now())
-    serializer_class = TermSerializer
+    serializer_class = TermViewSerializer
+
+
+class CourseSelectAPIView(generics.ListAPIView):
+    serializer_class = LessonListSerializer
+    queryset = Lesson.objects.all()
