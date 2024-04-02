@@ -1,7 +1,7 @@
 from rest_framework import serializers, status
 from rest_framework.exceptions import ValidationError
 from college.models import Faculty
-from lesson.models import Lesson
+from lesson.models import Lesson, Term
 from rest_framework.response import Response
 from .college_serializers import FacultySerializer
 
@@ -23,4 +23,10 @@ class LessonListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lesson
+        fields = '__all__'
+
+
+class TermSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Term
         fields = '__all__'
