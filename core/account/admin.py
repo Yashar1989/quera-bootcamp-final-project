@@ -14,13 +14,13 @@ class UserAdmin(admin.ModelAdmin):
 
 
 class StudentAdmin(ImportExportModelAdmin):
-    list_display = ['user', 'field', 'get_supervisor', 'seniority']
+    list_display = ['user', 'field', 'supervisor', 'seniority', 'get_user_code']
     list_filter = ['seniority', 'supervisor', 'field']
     resource_class = StudentResource
 
 
 class ProfessorAdmin(ImportExportModelAdmin):
-    list_display = ['user', 'faculty', 'proficiency', 'order']
+    list_display = ['user', 'faculty', 'proficiency', 'order', 'get_user_code']
     list_filter = ['faculty', 'order', 'proficiency']
     resource_class = ProfessorResource
 

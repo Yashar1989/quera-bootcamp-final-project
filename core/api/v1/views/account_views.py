@@ -3,10 +3,9 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from rest_framework.permissions import IsAdminUser
 from rest_framework import serializers, status
 from rest_framework.response import Response
-
 from account.models import User
 from ..serializers.account_serilizers import AssistantSerializer
-from account.models import Assistant, CustomUserManager
+from account.models import Assistant
 
 
 class CreateAssistantAPIView(ListCreateAPIView):

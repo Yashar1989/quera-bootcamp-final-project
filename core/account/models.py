@@ -1,5 +1,5 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from django.contrib.auth.models import BaseUserManager
+from django.contrib.auth.models import BaseUserManager, Group
 from django.db import models
 from .validators import is_valid_national_code, is_valid_mobile
 import uuid
@@ -23,8 +23,8 @@ class CustomUserManager(BaseUserManager):
 
     def create_student(self, password, **kwargs):
         user_code = f's{kwargs.get("national_code")}'
-        field = Field.objects.get(name=kwargs.pop('field'))
-        supervisor = Professor.objects.get(name=kwargs.pop('supervisor'))
+        field = Field.objects.get(id=kwargs.pop('field'))
+        supervisor = Professor.objects.get(id=kwargs.pop('supervisor'))
         seniority = kwargs.pop('seniority')
         user = self.__create_user(password, user_code, **kwargs)
         student = Student.objects.create(
@@ -39,7 +39,10 @@ class CustomUserManager(BaseUserManager):
     def create_assistant(self, password, **kwargs):
         user_code = f'a{kwargs.get("national_code")}'
         faculty = Faculty.objects.get(pk=kwargs.pop('faculty')['id'])
+        kwargs.setdefault("is_staff", True)
         user = self.__create_user(password, user_code, **kwargs)
+        group = Group.objects.get(name='assistant')
+        user.groups.add(group)
         assistant = Assistant.objects.create(
             user=user,
             faculty=faculty,
@@ -106,7 +109,11 @@ class Student(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='student')
     field = models.ForeignKey(to='college.Field', on_delete=models.PROTECT, related_name='field_students')
-    supervisor = models.ManyToManyField(to='Professor', related_name='supervisor')
+    supervisor = models.ForeignKey(to='Professor',
+                                   related_name='supervisor',
+                                   on_delete=models.PROTECT,
+                                   default='cf1df455-e983-49a9-96df-8bf7c3fd4b7c'
+                                   )
     seniority = models.CharField(max_length=1, blank=True, null=True, choices=(
         ('1', '1'),
         ('2', '2'),
@@ -116,12 +123,11 @@ class Student(models.Model):
         ('6', '6'),
     ))
 
-    def get_supervisor(self):
-        return ",".join([str(supervisor) for supervisor in self.supervisor.all()])
-
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'
 
+    def get_user_code(self):
+        return self.user.user_code
 
 class Assistant(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -143,3 +149,6 @@ class Professor(models.Model):
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'
+
+    def get_user_code(self):
+        return self.user.user_code

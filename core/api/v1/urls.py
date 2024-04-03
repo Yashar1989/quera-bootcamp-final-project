@@ -1,5 +1,14 @@
 from django.urls import path
-from .views.main_views import CreateStudent, ListStudents, FilterStudents, UpdateStudent, RetrieveStudent, DeleteStudent
+from .views.main_views import (
+    CreateStudent,
+    ListStudents,
+    FilterStudents,
+    UpdateStudent,
+    RetrieveStudent,
+    DeleteStudent,
+    TermListAPIView,
+    TermDetailAPIView,
+)
 from .views.account_views import CreateAssistantAPIView, AssistantAPIView
 from .views.lesson_views import LessonCreateAPIView, LessonRetrieveUpdateDestroyAPIView
 
@@ -15,12 +24,12 @@ urlpatterns = [
     path('assistant/', CreateAssistantAPIView.as_view(), name='create_assistant'),
     path('assistant/<uuid:pk>/', AssistantAPIView.as_view(), name='assistant'),
     path('subjects/', LessonCreateAPIView.as_view(), name='lesson'),
-    path('subjects/<slug:pk>/', LessonRetrieveUpdateDestroyAPIView.as_view(), name='lesson_update_delete')
+    path('subjects/<slug:pk>/', LessonRetrieveUpdateDestroyAPIView.as_view(), name='lesson_update_delete'),
 
 
     # section 'e' urls
-    # path('terms/', TermListAPIView.as_view(), name='term_list_view'),
-    # path('term/<int:pk>/', TermDetailAPIView.as_view(), name='term_detail_view'),
+    path('terms/', TermListAPIView.as_view(), name='term_list_view'),
+    path('term/<str:pk>/', TermDetailAPIView.as_view(), name='term_detail_view'),
     # path('student/<int:pk>/my-cources', CourseSelectAPIView.as_view(), name='course_select'),
     # path('/student/<int:pk>/pass-courses-report', PassCoursesAPIView.as_view(), name='pass_courses'),
     # path('/student/<int:pk>/term-courses/', PassingCoursesAPIView.as_view(), name='passing_course'),

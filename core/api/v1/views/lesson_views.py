@@ -1,9 +1,13 @@
-from django.contrib.admin import action
-from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView
-from ..serializers.lesson_serializers import LessonCreateSerializer, LessonListSerializer
+from rest_framework.generics import (
+    ListCreateAPIView,
+    RetrieveUpdateDestroyAPIView
+)
+from ..serializers.lesson_serializers import (
+    LessonCreateSerializer,
+    LessonListSerializer
+)
 from lesson.models import Lesson
 from ..permissions import IsFacultyAssistant
-from rest_framework import filters
 
 
 class LessonCreateAPIView(ListCreateAPIView):
