@@ -13,7 +13,7 @@ class FacultyListViews(ListCreateAPIView):
 
 
 
-class FacultyUpdateView(RetrieveDestroyAPIView):
-    queryset = Faculty.objects.all()
-    serializer_class = FacultySerializers
-    permission_classes = (IsAdminUser ,)
+# class FacultyUpdateView(RetrieveDestroyAPIView):
+#     queryset = Faculty.objects.all()
+#     serializer_class = FacultySerializers
+#     permission_classes = (IsAdminUser ,)
