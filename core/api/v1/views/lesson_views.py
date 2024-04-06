@@ -1,12 +1,14 @@
 from rest_framework.generics import (
     ListCreateAPIView,
-    RetrieveUpdateDestroyAPIView
+    RetrieveUpdateDestroyAPIView, ListAPIView, RetrieveAPIView
 )
+
 from ..serializers.lesson_serializers import (
     LessonCreateSerializer,
-    LessonListSerializer
+    LessonListSerializer,
+    TermShowSerializer
 )
-from lesson.models import Lesson
+from lesson.models import Lesson, Term
 from ..permissions import IsFacultyAssistant
 
 
@@ -27,3 +29,7 @@ class LessonRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = LessonListSerializer
     queryset = Lesson.objects.all()
 
+
+class TermListRetrieveAPIView(ListAPIView, RetrieveAPIView):
+    serializer_class = TermShowSerializer
+    queryset = Term.objects.all()

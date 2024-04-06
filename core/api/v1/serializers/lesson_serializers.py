@@ -26,7 +26,7 @@ class LessonListSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TermSerializer(serializers.ModelSerializer):
+class TermShowSerializer(serializers.ModelSerializer):
     class Meta:
         model = Term
         fields = '__all__'
