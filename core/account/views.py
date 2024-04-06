@@ -8,10 +8,9 @@ from lesson.models import Term
 from .serializers import (
     AssistantSerializer,
     ProfessorSerializers,
-    TermSerializer,
     UpdateDeleteProfessorSerializer
 )
-from .serializers import ProfessorSerializers, TermSerializer
+from .serializers import ProfessorSerializers
 
 
 class RegisterProfessorView(ListCreateAPIView):
@@ -76,51 +75,51 @@ class AssistantAPIView(RetrieveUpdateDestroyAPIView):
             return super().handle_exception(e)
 
 
-class CreateTermAPIView(ListCreateAPIView):
-    """
-    Create New Term By IT Admin
-    """
-    serializer_class = TermSerializer
-    permission_classes = [IsAdminUser]
-    queryset = Term.objects.all()
+# class CreateTermAPIView(ListCreateAPIView):
+#     """
+#     Create New Term By IT Admin
+#     """
+#     serializer_class = TermSerializer
+#     permission_classes = [IsAdminUser]
+#     queryset = Term.objects.all()
 
-    def perform_create(self, serializer):
-        data = serializer.validated_data
-        existing_term = Term.objects.filter(name=data['name'])
-        if existing_term.exists():
-            raise serializers.ValidationError("a term with the same name already exists.")
-        serializer.save()
+#     def perform_create(self, serializer):
+#         data = serializer.validated_data
+#         existing_term = Term.objects.filter(name=data['name'])
+#         if existing_term.exists():
+#             raise serializers.ValidationError("a term with the same name already exists.")
+#         serializer.save()
 
-    def create(self, request, *args, **kwargs):
-        try:
-            return super().create(request, *args, **kwargs)
-        except serializers.ValidationError as e:
-            return Response({'error': str(e)}, status=status.HTTP_409_CONFLICT)
+#     def create(self, request, *args, **kwargs):
+#         try:
+#             return super().create(request, *args, **kwargs)
+#         except serializers.ValidationError as e:
+#             return Response({'error': str(e)}, status=status.HTTP_409_CONFLICT)
 
-        except Exception as e:
-            return super().handle_exception(e)
+#         except Exception as e:
+#             return super().handle_exception(e)
 
 
-class DetailTermAPIView(RetrieveUpdateDestroyAPIView):
-    """
-    Retrieve, update, delete a term
-    """
-    serializer_class = TermSerializer
-    permission_classes = [IsAdminUser]
-    queryset = Term.objects.all()
+# class DetailTermAPIView(RetrieveUpdateDestroyAPIView):
+#     """
+#     Retrieve, update, delete a term
+#     """
+#     serializer_class = TermSerializer
+#     permission_classes = [IsAdminUser]
+#     queryset = Term.objects.all()
 
-    def perform_update(self, serializer):
-        data = serializer.validated_data
-        existing_term = Term.objects.filter(name=data['name'])
-        if existing_term.exists():
-            raise serializers.ValidationError("a term with the same name already exists.")
-        serializer.save()
+#     def perform_update(self, serializer):
+#         data = serializer.validated_data
+#         existing_term = Term.objects.filter(name=data['name'])
+#         if existing_term.exists():
+#             raise serializers.ValidationError("a term with the same name already exists.")
+#         serializer.save()
 
-    def update(self, request, *args, **kwargs):
-        try:
-            return super().update(request, *args, **kwargs)
-        except serializers.ValidationError as e:
-            return Response({'error': str(e)}, status=status.HTTP_409_CONFLICT)
+#     def update(self, request, *args, **kwargs):
+#         try:
+#             return super().update(request, *args, **kwargs)
+#         except serializers.ValidationError as e:
+#             return Response({'error': str(e)}, status=status.HTTP_409_CONFLICT)
 
-        except Exception as e:
-            return super().handle_exception(e)
+#         except Exception as e:
+#             return super().handle_exception(e)

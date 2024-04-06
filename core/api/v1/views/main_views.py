@@ -70,11 +70,3 @@ class DeleteStudent(generics.DestroyAPIView):
     lookup_field = 'user__user_code'
 
 
-class TermListAPIView(generics.ListAPIView):
-    queryset = Term.objects.filter(term_end_time__gte=datetime.now())
-    serializer_class = TermSerializer
-
-
-class TermDetailAPIView(generics.RetrieveAPIView):
-    queryset = Term.objects.filter(term_end_time__gte=datetime.now())
-    serializer_class = TermSerializer
