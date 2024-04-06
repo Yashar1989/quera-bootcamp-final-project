@@ -31,3 +31,8 @@ class TermSerializer(serializers.ModelSerializer):
         model = Term
         fields = '__all__'
 
+
+class LessonCRUDSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lesson
+        fields = '__all__'

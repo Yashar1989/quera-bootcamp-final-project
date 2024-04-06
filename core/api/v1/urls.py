@@ -1,4 +1,5 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework import routers
 from .views.main_views import (
     CreateStudent,
     ListStudents,
@@ -9,11 +10,14 @@ from .views.main_views import (
 )
 
 from .views.account_views import CreateAssistantAPIView, AssistantAPIView, ChangePasswordRequest, ChangePasswordAction
-from .views.lesson_views import LessonCreateAPIView, LessonRetrieveUpdateDestroyAPIView, ListCreateTermAPIView, RetrieveUpdateDestroyTermAPIView
+from .views.lesson_views import LessonCreateAPIView, LessonRetrieveUpdateDestroyAPIView, ListCreateTermAPIView, RetrieveUpdateDestroyTermAPIView, SubjectModelViewSet
 
 app_name = 'api_v1'
+router =  routers.SimpleRouter()
+router.register('subjects', SubjectModelViewSet, basename='subjects')
 
 urlpatterns = [
+    path("", include(router.urls)),
     path('create-student/', CreateStudent.as_view(), name='create-student'),
     path('list-students/', ListStudents.as_view(), name='list-students'),
     path('filter-students/', FilterStudents.as_view(), name='filter-students'),

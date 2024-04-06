@@ -181,5 +181,5 @@ REDIS_PORT = 30088
 REDIS_PASSWORD = '7vs9HjKKdRWmnNb9htp3jPFx'
 
 # Celery settings
-CELERY_BROKER_URL = 'redis://lhotse.liara.cloud:30088/0'
-CELERY_RESULT_BACKEND = 'redis://lhotse.liara.cloud:30088/0'
+CELERY_BROKER_URL = 'redis://:7vs9HjKKdRWmnNb9htp3jPFx@lhotse.liara.cloud:30088/0'
+CELERY_RESULT_BACKEND = 'redis://:7vs9HjKKdRWmnNb9htp3jPFx@ lhotse.liara.cloud:30088/0'

@@ -1,18 +1,16 @@
-from rest_framework.generics import (
-    ListCreateAPIView,
-    RetrieveUpdateDestroyAPIView
-)
-from ..serializers.lesson_serializers import (
-    LessonCreateSerializer,
-    LessonListSerializer
-)
-from lesson.models import Lesson, Term
-from ..permissions import IsFacultyAssistant
-
 from rest_framework.permissions import IsAdminUser
 from rest_framework import status, serializers
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
+from ..serializers.lesson_serializers import (
+    LessonCreateSerializer,
+    LessonListSerializer,
+    LessonCRUDSerializer,
+)
+from lesson.models import Lesson, Term
+from ..permissions import IsFacultyAssistant
 from ..serializers.lesson_serializers import TermSerializer
 
 class LessonCreateAPIView(ListCreateAPIView):
@@ -82,3 +80,8 @@ class RetrieveUpdateDestroyTermAPIView(RetrieveUpdateDestroyAPIView):
         except Exception as e:
             return super().handle_exception(e)
 
+
+class SubjectModelViewSet(ModelViewSet):
+	# permission_classes = []
+    queryset = Lesson.objects.all()
+    serializer_class = LessonCRUDSerializer
