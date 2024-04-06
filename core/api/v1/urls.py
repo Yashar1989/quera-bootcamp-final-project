@@ -6,11 +6,9 @@ from .views.main_views import (
     UpdateStudent,
     RetrieveStudent,
     DeleteStudent,
-    TermListAPIView,
-    TermDetailAPIView,
 )
 from .views.account_views import CreateAssistantAPIView, AssistantAPIView
-from .views.lesson_views import LessonCreateAPIView, LessonRetrieveUpdateDestroyAPIView
+from .views.lesson_views import LessonCreateAPIView, LessonRetrieveUpdateDestroyAPIView, TermListRetrieveAPIView
 
 app_name = 'api_v1'
 
@@ -28,8 +26,8 @@ urlpatterns = [
 
 
     # section 'e' urls
-    path('terms/', TermListAPIView.as_view(), name='term_list_view'),
-    path('term/<str:pk>/', TermDetailAPIView.as_view(), name='term_detail_view'),
+    path('terms/', TermListRetrieveAPIView.as_view(), name='term_list_view'),
+    path('term/<str:pk>/', TermListRetrieveAPIView.as_view(), name='term_detail_view'),
     # path('student/<int:pk>/my-cources', CourseSelectAPIView.as_view(), name='course_select'),
     # path('/student/<int:pk>/pass-courses-report', PassCoursesAPIView.as_view(), name='pass_courses'),
     # path('/student/<int:pk>/term-courses/', PassingCoursesAPIView.as_view(), name='passing_course'),
