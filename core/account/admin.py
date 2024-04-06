@@ -8,7 +8,7 @@ from .models import User, Student, Professor, Assistant
 # Register your models here.
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['national_code', 'first_name', 'last_name', 'user_code', 'phone_number', 'gender']
+    list_display = ['national_code', 'first_name', 'last_name', 'user_code', 'phone_number', 'gender', 'email']
     list_filter = ['gender']
     ordering = ['national_code']
 

@@ -29,3 +29,5 @@ class IsFacultyAssistant(BasePermission):
                     request.user.is_superuser or
                     Assistant.objects.filter(user=request.user).values_list('faculty',
                                                                             flat=True).first() == lesson_faculty)
+
+

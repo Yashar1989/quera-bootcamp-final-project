@@ -1,3 +1,8 @@
+from rest_framework.permissions import IsAdminUser
+from rest_framework import status, serializers
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.generics import (
     ListCreateAPIView,
     RetrieveUpdateDestroyAPIView, ListAPIView, RetrieveAPIView
@@ -6,11 +11,12 @@ from rest_framework.generics import (
 from ..serializers.lesson_serializers import (
     LessonCreateSerializer,
     LessonListSerializer,
+    LessonCRUDSerializer,
     TermShowSerializer
 )
 from lesson.models import Lesson, Term
 from ..permissions import IsFacultyAssistant
-
+from ..serializers.lesson_serializers import TermSerializer
 
 class LessonCreateAPIView(ListCreateAPIView):
     permission_classes = [IsFacultyAssistant]
@@ -30,6 +36,57 @@ class LessonRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Lesson.objects.all()
 
 
-class TermListRetrieveAPIView(ListAPIView, RetrieveAPIView):
-    serializer_class = TermShowSerializer
+class ListCreateTermAPIView(ListCreateAPIView):
+    """
+    Create New Term By IT Admin
+    """
+    serializer_class = TermSerializer
+    permission_classes = [IsAdminUser]
     queryset = Term.objects.all()
+
+    def perform_create(self, serializer):
+        data = serializer.validated_data
+        existing_term = Term.objects.filter(name=data['name'])
+        if existing_term.exists():
+            raise serializers.ValidationError("a term with the same name already exists.")
+        serializer.save()
+
+    def create(self, request, *args, **kwargs):
+        try:
+            return super().create(request, *args, **kwargs)
+        except serializers.ValidationError as e:
+            return Response({'error': str(e)}, status=status.HTTP_409_CONFLICT)
+
+        except Exception as e:
+            return super().handle_exception(e)
+
+
+class RetrieveUpdateDestroyTermAPIView(RetrieveUpdateDestroyAPIView):
+    """
+    Retrieve, update, delete a term
+    """
+    serializer_class = TermSerializer
+    permission_classes = [IsAdminUser]
+    queryset = Term.objects.all()
+
+    def perform_update(self, serializer):
+        data = serializer.validated_data
+        existing_term = Term.objects.filter(name=data['name'])
+        if existing_term.exists():
+            raise serializers.ValidationError("a term with the same name already exists.")
+        serializer.save()
+
+    def update(self, request, *args, **kwargs):
+        try:
+            return super().update(request, *args, **kwargs)
+        except serializers.ValidationError as e:
+            return Response({'error': str(e)}, status=status.HTTP_409_CONFLICT)
+
+        except Exception as e:
+            return super().handle_exception(e)
+
+
+class SubjectModelViewSet(ModelViewSet):
+	# permission_classes = []
+    queryset = Lesson.objects.all()
+    serializer_class = LessonCRUDSerializer

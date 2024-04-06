@@ -1,11 +1,17 @@
-from django.contrib.auth import get_user_model
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAdminUser
-from rest_framework import serializers, status
 from rest_framework.response import Response
-from account.models import User
+from rest_framework.views import APIView
+from rest_framework import status, serializers
+from django.contrib.auth import get_user_model
+from django.conf import settings
+import redis
+
 from ..serializers.account_serilizers import AssistantSerializer
+from ..tasks import send_password_reset_email
 from account.models import Assistant
+
+User = get_user_model()
 
 
 class CreateAssistantAPIView(ListCreateAPIView):
@@ -46,3 +52,34 @@ class AssistantAPIView(RetrieveUpdateDestroyAPIView):
         super().delete(request, *args, **kwargs)
         user = User.objects.filter(id=user_id).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ChangePasswordRequest(APIView):
+    def post(self, request, *args, **kwargs):
+        email = request.data.get('email')
+        if email:
+            user = User.objects.get(email=email)
+            if user:
+                send_password_reset_email.delay(email)
+                return Response("Password reset email has been sent.", status=status.HTTP_200_OK)
+            else:
+                return Response("User with this email not found.", status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response("Email is required.", status=status.HTTP_400_BAD_REQUEST)
+
+class ChangePasswordAction(APIView):
+    def post(self, request, *args, **kwargs):
+        token = request.data.get('token')
+        new_password = request.data.get('new_password')
+        if token and new_password:
+            r = redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, password=settings.REDIS_PASSWORD, db=0)
+            email = r.get(token)
+            if email:
+                user = User.objects.get(email=email)
+                user.set_password(new_password)
+                user.save()
+                return Response("Password has been updated successfully.", status=status.HTTP_200_OK)
+            else:
+                return Response("Invalid or expired token.", status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response("Token and new password are required.", status=status.HTTP_400_BAD_REQUEST)

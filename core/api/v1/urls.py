@@ -1,4 +1,5 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework import routers
 from .views.main_views import (
     CreateStudent,
     ListStudents,
@@ -7,12 +8,16 @@ from .views.main_views import (
     RetrieveStudent,
     DeleteStudent,
 )
-from .views.account_views import CreateAssistantAPIView, AssistantAPIView
-from .views.lesson_views import LessonCreateAPIView, LessonRetrieveUpdateDestroyAPIView, TermListRetrieveAPIView
+
+from .views.account_views import CreateAssistantAPIView, AssistantAPIView, ChangePasswordRequest, ChangePasswordAction
+from .views.lesson_views import LessonCreateAPIView, LessonRetrieveUpdateDestroyAPIView, ListCreateTermAPIView, RetrieveUpdateDestroyTermAPIView, SubjectModelViewSet
 
 app_name = 'api_v1'
+router =  routers.SimpleRouter()
+router.register('subjects', SubjectModelViewSet, basename='subjects')
 
 urlpatterns = [
+    path("", include(router.urls)),
     path('create-student/', CreateStudent.as_view(), name='create-student'),
     path('list-students/', ListStudents.as_view(), name='list-students'),
     path('filter-students/', FilterStudents.as_view(), name='filter-students'),
@@ -24,10 +29,16 @@ urlpatterns = [
     path('subjects/', LessonCreateAPIView.as_view(), name='lesson'),
     path('subjects/<slug:pk>/', LessonRetrieveUpdateDestroyAPIView.as_view(), name='lesson_update_delete'),
 
+    # Term
+    path('term/', ListCreateTermAPIView.as_view(), name='create_term'),
+    path('term/<uuid:pk>/', RetrieveUpdateDestroyTermAPIView.as_view(), name='detail_term'),
+
+    # Forget password
+    path('users/change-password-request/', ChangePasswordRequest.as_view()),
+    path('users/change-password-action/', ChangePasswordAction.as_view()),
+
 
     # section 'e' urls
-    path('terms/', TermListRetrieveAPIView.as_view(), name='term_list_view'),
-    path('term/<str:pk>/', TermListRetrieveAPIView.as_view(), name='term_detail_view'),
     # path('student/<int:pk>/my-cources', CourseSelectAPIView.as_view(), name='course_select'),
     # path('/student/<int:pk>/pass-courses-report', PassCoursesAPIView.as_view(), name='pass_courses'),
     # path('/student/<int:pk>/term-courses/', PassingCoursesAPIView.as_view(), name='passing_course'),

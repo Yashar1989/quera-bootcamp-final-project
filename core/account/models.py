@@ -1,5 +1,4 @@
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from django.contrib.auth.models import BaseUserManager, Group
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager, Group
 from django.db import models
 from .validators import is_valid_national_code, is_valid_mobile
 import uuid
@@ -80,7 +79,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     first_name = models.CharField(max_length=255, verbose_name='نام')
     last_name = models.CharField(max_length=255, verbose_name='نام خانوادگی')
-    user_code = models.CharField(max_length=11, unique=True)
+    user_code = models.CharField(max_length=11, unique=True, blank=True, null=True)
     image = models.ImageField(upload_to='profile', null=True, blank=True, verbose_name='عکس پروفایل')
     phone_number = models.BigIntegerField(unique=True, validators=[is_valid_mobile], verbose_name='تلفن همراه',
                                           null=True, blank=True)
@@ -90,7 +89,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     birth_date = models.DateField(verbose_name='تاریخ تولد')
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-
+    email = models.EmailField(unique=True, null=True, blank=True, verbose_name='ایمیل')
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
