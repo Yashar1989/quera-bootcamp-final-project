@@ -3,11 +3,16 @@ from rest_framework import status, serializers
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import (
+    ListCreateAPIView,
+    RetrieveUpdateDestroyAPIView, ListAPIView, RetrieveAPIView
+)
 
 from ..serializers.lesson_serializers import (
     LessonCreateSerializer,
     LessonListSerializer,
     LessonCRUDSerializer,
+    TermShowSerializer
 )
 from lesson.models import Lesson, Term
 from ..permissions import IsFacultyAssistant

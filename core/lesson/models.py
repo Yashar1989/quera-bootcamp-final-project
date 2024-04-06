@@ -17,6 +17,7 @@ class Term(models.Model):
     emergency_removal_end_time = models.DateTimeField(null=False, blank=False)
     exams_start_time = models.DateField(null=False, blank=False)
     term_end_time = models.DateField(null=False, blank=False)
+    is_active = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

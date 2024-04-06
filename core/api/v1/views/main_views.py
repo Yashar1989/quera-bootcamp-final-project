@@ -6,7 +6,7 @@ from lesson.models import TermLesson, Term
 from ..serializers.main_serializers import StudentSerializer
 from django.db.models import Q
 from ..serializers.main_serializers import FilteredStudentSerializer, DetailedStudentSerializer
-from ..serializers.lesson_serializers import TermSerializer
+
 from rest_framework import generics
 import re
 from datetime import datetime
@@ -68,5 +68,3 @@ class UpdateStudent(generics.UpdateAPIView):
 class DeleteStudent(generics.DestroyAPIView):
     queryset = Student.objects.all()
     lookup_field = 'user__user_code'
-
-
